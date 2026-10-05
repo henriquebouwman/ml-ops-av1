@@ -411,6 +411,7 @@ dependencies = [
 dev = [
     { name = "pytest" },
     { name = "rust-just" },
+    { name = "starlette" },
 ]
 
 [package.metadata]
@@ -425,6 +426,7 @@ requires-dist = [
 dev = [
     { name = "pytest", specifier = "==9.1.1" },
     { name = "rust-just", specifier = "==1.58.0" },
+    { name = "starlette", specifier = "==1.7.0" },
 ]
 
 [[package]]
