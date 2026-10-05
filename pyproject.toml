@@ -1,0 +1,16 @@
+[project]
+name = "leitura-medidor"
+version = "0.1.0"
+description = "Serviço BentoML de extração de leitura de medidor de energia"
+requires-python = "==3.12.*"
+dependencies = [
+    "bentoml==1.4.39",
+    "httpx==0.28.1",
+    "pillow==12.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+    "rust-just==1.58.0",
+]
