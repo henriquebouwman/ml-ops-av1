@@ -1,0 +1,19 @@
+# Evidência: chamadas reais ao serviço rodando em localhost:3000 (2026-10-05 20:48)
+
+$ curl -i http://localhost:3000/healthz
+HTTP/1.1 200 OK
+
+$ curl -i http://localhost:3000/readyz
+HTTP/1.1 200 OK
+
+$ curl -s -F "image=@examples/example02.jpg" http://localhost:3000/extract
+{"numero_medidor":"00175519","funcao":null,"consumo":1385.0,"confianca":{"numero_medidor":0.9,"funcao":0.0,"consumo":0.9,"geral":0.6},"status":"OK","modelo":"qwen2.5vl:3b","tempo_ms":1319}
+[HTTP 200]
+
+$ curl -s -F "image=@examples/example04.jpg" http://localhost:3000/extract
+{"numero_medidor":"4788591","funcao":null,"consumo":28256.0,"confianca":{"numero_medidor":0.9,"funcao":0.0,"consumo":0.9,"geral":0.6},"status":"OK","modelo":"qwen2.5vl:3b","tempo_ms":3568}
+[HTTP 200]
+
+$ echo "isto nao e imagem" > falsa.jpg && curl -s -F "image=@falsa.jpg" http://localhost:3000/extract
+[{"error":"O campo 'image' não é uma imagem válida. Envie um arquivo JPEG, PNG ou WebP."}]
+[HTTP 400]
