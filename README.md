@@ -89,22 +89,32 @@ cliente. Nomes originais: `relogio-eletronico.jpg` (01), `hqdefault.jpg` (02),
 | git | qualquer recente | |
 | [uv](https://docs.astral.sh/uv/getting-started/installation/) | 0.11.8 | baixa sozinho o Python 3.12.13 e o `just` |
 | [Ollama](https://ollama.com/download) | 0.12.3 | |
-| Disco | ~5 GB livres | 3,2 GB do modelo + ~1 GB do ambiente Python |
+| Disco | ~4 GB livres | 3,2 GB do modelo + ~100 MB do ambiente Python |
 | RAM | 8 GB ou mais | |
 
 Não é preciso instalar Python nem `just` à parte: o `uv` instala a versão fixada em
 `.python-version` e o `just` vem como dependência de desenvolvimento (`rust-just`).
 
-**Do clone até a primeira predição** (com internet, só na primeira vez):
+**Do clone até a primeira predição** (com internet, só na primeira vez). São três
+terminais, porque o Ollama e o serviço ficam rodando:
 
 ```bash
+# Terminal 1: Ollama (ou abra o app do Ollama, que já sobe o servidor)
+ollama serve
+```
+
+```bash
+# Terminal 2: instalação e serviço
 git clone <URL-do-repositório> repositorio-av1
 cd repositorio-av1
-
-uv run just setup     # ~1 min: Python 3.12.13 + dependências exatas do uv.lock
-ollama serve          # deixe rodando em outro terminal (ou abra o app do Ollama)
+uv run just setup     # até ~1 min: Python 3.12.13 + dependências exatas do uv.lock (~85 MB)
 uv run just model     # ~2 a 10 min, conforme a rede: download de 3,2 GB
-uv run just serve     # ~10 s para subir; deixe rodando em outro terminal
+uv run just serve     # sobe em poucos segundos e fica rodando
+```
+
+```bash
+# Terminal 3: primeira predição
+cd repositorio-av1
 uv run just demo      # ~20 s na primeira chamada (carrega o modelo), depois 1,5 a 5 s
 ```
 
@@ -190,8 +200,14 @@ checagem mas o modelo não lê nenhum campo, o status também é `ILEGIVEL`.
 |---|---|---|
 | Arquivo não é imagem | 400 | `O campo 'image' não é uma imagem válida. Envie um arquivo JPEG, PNG ou WebP.` |
 | Campo `image` ausente | 400 | erro de validação do BentoML (`Field required`) |
-| Ollama fora do ar | 503 | `Modelo indisponível: confira se o Ollama está rodando (ollama serve).` |
-| Modelo devolveu JSON fora do formato | 502 | `O modelo devolveu uma resposta fora do formato esperado.` |
+| Ollama fora do ar | 503 | corpo genérico do BentoML; no log do servidor: `Modelo indisponível: confira se o Ollama está rodando (ollama serve).` |
+| Modelo devolveu JSON fora do formato | 502 | corpo genérico do BentoML; no log do servidor: `O modelo devolveu uma resposta fora do formato esperado.` |
+
+Nos erros 5xx o BentoML não repassa a mensagem ao cliente (por segurança, o corpo é
+sempre `An unexpected error has occurred, please check the server log.`); a mensagem
+clara fica no terminal do `just serve`. Para diagnosticar, `curl -i
+http://localhost:3000/readyz` devolve 503 enquanto o Ollama ou o modelo não estiverem
+prontos.
 
 ## Testes
 
