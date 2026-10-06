@@ -139,6 +139,18 @@ UV_OFFLINE=1 uv run just demo     # terminal 3
 
 `UV_OFFLINE=1` impede o `uv` de tentar consultar a internet.
 
+**Windows.** O fluxo acima foi testado em macOS; em Linux os comandos são os mesmos.
+Não foi testado no Windows. No Windows, a recomendação é usar WSL2 e seguir os mesmos
+comandos. Sem WSL, o `justfile` pode não
+funcionar; os comandos equivalentes, no PowerShell, são:
+
+```powershell
+uv sync --frozen
+ollama pull qwen2.5vl:3b
+uv run bentoml serve service:LeituraMedidor --port 3000
+curl.exe -s -F "image=@examples/example02.jpg" http://localhost:3000/extract
+```
+
 ## Uso
 
 **Endpoint:** `POST /extract`, `multipart/form-data` com o campo `image` (JPEG, PNG ou WebP).
