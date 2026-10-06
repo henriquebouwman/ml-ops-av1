@@ -144,7 +144,10 @@ UV_OFFLINE=1 uv run just demo     # terminal 3
 **Endpoint:** `POST /extract`, `multipart/form-data` com o campo `image` (JPEG, PNG ou WebP).
 
 **Swagger:** http://localhost:3000 (com o serviço no ar), onde dá para enviar uma foto
-pelo navegador.
+pelo navegador. Abaixo, uma chamada real com `example02.jpg` feita pelo Swagger
+(`docs/swagger.png`):
+
+![Chamada ao POST /extract pelo Swagger, com resposta 200](docs/swagger.png)
 
 **Exemplo de entrada e saída:**
 
