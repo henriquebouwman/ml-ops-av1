@@ -74,10 +74,31 @@ campo e marca como `ILEGIVEL` fotos sem display legível.
 4. Melhorar a captura na origem: orientar o leiturista ou exigir resolução maior no app.
    Nenhum modelo recupera um display que não está na foto.
 
-**Origem das imagens de exemplo:** as 5 fotos em `examples/` são imagens públicas de
-medidores obtidas na internet, usadas aqui só para fins educacionais; nenhuma é dado do
-cliente. Nomes originais: `relogio-eletronico.jpg` (01), `hqdefault.jpg` (02),
-`image-1617.png` (03), `relogio-ciclometrico.jpg` (04), `medidor_de_luz_21_crop.jpg` (05).
+### Imagens de exemplo: origem e justificativa
+
+As 5 imagens em `examples/` são fotos públicas de medidores, obtidas na internet:
+
+| Arquivo | Nome original | Tipo de medidor | Resolução | Fonte |
+|---|---|---|---|---|
+| `example01.jpg` | `relogio-eletronico.jpg` | digital (LCD) | 461×460 | fonte não registrada |
+| `example02.jpg` | `hqdefault.jpg` | digital (LCD) | 480×360 | fonte não registrada |
+| `example03.png` | `image-1617.png` | digital, com reflexo e desfoque | 469×405 | fonte não registrada |
+| `example04.jpg` | `relogio-ciclometrico.jpg` | ciclométrico | 462×462 | fonte não registrada |
+| `example05.jpg` | `medidor_de_luz_21_crop.jpg` | ciclométrico, baixa resolução | 265×159 | fonte não registrada |
+
+**Isso foge da orientação do professor**, que pediu imagens sintéticas ou fotos do nosso
+próprio medidor. A escolha foi consciente: uma foto do próprio medidor mostraria um único
+tipo de display, em boas condições. Selecionamos imagens públicas que cobrem tipos
+diferentes (digital, ciclométrico, digital com reflexo e uma de resolução muito baixa)
+para mostrar onde o modelo acerta e onde falha, que é o que a seção de Limitações precisa
+evidenciar.
+
+**Nenhuma dessas imagens é dado do cliente.** As fotos reais da distribuidora não estão
+neste repositório, nem em nenhum commit.
+
+**Uso educacional.** As imagens são usadas apenas para fins educacionais, nesta
+disciplina. Os direitos pertencem aos autores originais. Qualquer imagem será removida a
+pedido do autor ou do detentor dos direitos.
 
 ## Como subir
 
@@ -271,7 +292,7 @@ extractor/
   confianca.py       validações de formato e fórmula da confiança
 tests/               3 testes do /extract
 examples/            5 fotos públicas + exemplo_resposta.json
-docs/                evidências (curl, Swagger)
+docs/                evidências (curl, Swagger) e texto do slide sobre as imagens
 scripts/probe_model.py   teste descartável usado para escolher o modelo
 justfile             setup, model, serve, test, demo
 ```
