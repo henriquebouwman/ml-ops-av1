@@ -264,23 +264,58 @@ Saída esperada: `3 passed` (ou `2 passed, 1 skipped` sem o Ollama).
 
 ## Uso de IA
 
-> Seção a ser preenchida pela equipe.
+**Ferramentas usadas**
 
-**Ferramenta(s) usada(s):**
+- **Claude Cowork** (Anthropic): para montar o roteiro de execução, com as etapas, as
+  restrições e os critérios de entrega.
+- **Claude Code** (Anthropic, modelo Claude Opus): para executar o roteiro neste
+  repositório, rodando os comandos, escrevendo o código e fazendo os commits. A equipe
+  foi conferindo cada entrega.
 
-_…_
+**O que foi pedido à ferramenta, por etapa** (ver `git log`)
 
-**O que foi pedido à ferramenta** (etapas, prompts principais):
+| Etapa | O que pedimos | Commits |
+|---|---|---|
+| Repositório | `.gitignore` antes de tudo, LICENSE MIT, esqueleto do README | `8f24928` |
+| Dependências | Python fixado, dependências com versão exata, `uv.lock` | `0b9fa80` |
+| Escolha do modelo | um script descartável que rodasse o modelo local nas fotos de exemplo e mostrasse resultado e tempo, parando para a nossa decisão | `fe705e8` |
+| Serviço | `POST /extract` em BentoML, com o contrato JSON, erro 4xx para arquivo inválido e `ILEGIVEL` para foto sem display | `178c218` |
+| Confiança | combinar a confiança declarada pelo modelo com validações determinísticas, numa fórmula explicável em uma frase | `178c218` |
+| Nitidez | checagem antes do modelo, porque numa foto lisa o modelo inventava um número | `178c218` |
+| Comando único | `justfile` com setup, model, serve, test e demo | `e789fa8` |
+| Testes | 3 testes: foto boa, foto ruim e entrada inválida | `82ffb24` |
+| README | seções na ordem das perguntas da apresentação, com limitações honestas | `ac68526` |
+| Revisão da entrega | simular um clone limpo seguindo o README e corrigir o que travasse; checklist de nome do cliente, segredos e dados; pendências finais (quebras de linha, imagens, Swagger, Windows, esta seção) | `0ccf5d5` em diante |
 
-_…_
+**Problemas que apareceram durante a execução** (a maioria apontada pela própria
+ferramenta ao testar; registramos aqui porque mudaram o resultado):
 
-**O que aceitamos, o que corrigimos e o que rejeitamos:**
+- O modelo copiava o valor de exemplo que estava no prompt ("03") como resposta; o
+  exemplo foi tirado do prompt.
+- Numa imagem lisa, o modelo inventava o número `1234567890` em vez de devolver `null`;
+  por isso entrou a checagem de nitidez antes do modelo.
+- O Ollama mostra a licença Apache 2.0 para o `qwen2.5vl:3b`, mas o repositório original
+  declara uma licença só para pesquisa; corrigimos na seção Modelo.
+- O primeiro passo a passo do README travava se seguido num terminal só, e a estimativa
+  de tamanho do ambiente estava errada (~1 GB, o real é ~85 MB); os dois apareceram na
+  simulação do clone limpo.
+- Nós colocamos por engano a pasta com a base do cliente dentro do repositório; a
+  ferramenta parou antes de qualquer commit e a pasta foi movida para fora.
 
-_…_
+**Nossa avaliação crítica**
 
-**Nossa avaliação crítica:**
+A ferramenta executou bem o roteiro e não encontramos muitos erros no que ela entregou.
+O ponto que precisamos esclarecer durante o trabalho foi o foco: o mais importante era
+entregar o fluxo bem feito (serviço, dependências fixadas, testes, README que roda) e
+não ter um modelo com boa acurácia. Depois disso, as decisões passaram a priorizar o
+serviço em volta do modelo.
 
-_…_
+- **O que aceitamos sem alterar:** de modo geral, a execução das etapas do roteiro.
+- **O que corrigimos ou rejeitamos:** _[PENDENTE: preencher pela equipe]_
+- **O que ainda não confiamos:** _[PENDENTE: preencher pela equipe — por exemplo, o
+  limiar de nitidez de 300, a fórmula de confiança, o prompt]_
+- **Como dividimos a revisão do código:** _[PENDENTE: preencher pela equipe — quem
+  revisou `service.py`, `extractor/`, os testes e o README]_
 
 ## Estrutura
 
