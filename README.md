@@ -160,10 +160,17 @@ UV_OFFLINE=1 uv run just demo     # terminal 3
 
 `UV_OFFLINE=1` impede o `uv` de tentar consultar a internet.
 
-**Windows.** O fluxo acima foi testado em macOS; em Linux os comandos são os mesmos.
-Não foi testado no Windows. No Windows, a recomendação é usar WSL2 e seguir os mesmos
-comandos. Sem WSL, o `justfile` pode não
-funcionar; os comandos equivalentes, no PowerShell, são:
+**Windows.** Testado em Windows 11 (Git Bash, `uv` 0.12.23, Ollama 0.35.1, Ryzen 5 5600X,
+16 GB de RAM, Radeon RX 6600): `uv sync --frozen`, `uv run just serve`, `uv run just demo`
+e `uv run just test` funcionam e dão as mesmas respostas do macOS (`example02.jpg`:
+série `00175519`, consumo `1385`; `example04.jpg`: série `4788591`, consumo `28256`).
+Tempo medido: ~24 s na primeira chamada (carrega o modelo), 3,6 s nas seguintes. O `just`
+roda as receitas com `sh` (vem com o Git para Windows), e as receitas chamam o `uv`
+diretamente: ele precisa estar no `PATH`. Com o instalador oficial do `uv` isso já
+acontece; se instalou com `pip install --user uv`, adicione ao `PATH` a pasta
+`%APPDATA%\Python\Python313\Scripts`, ou use `python -m uv run just ...` com essa pasta
+no `PATH`. Em PowerShell puro, sem Git para Windows, o `justfile` pode não funcionar; os
+comandos equivalentes são:
 
 ```powershell
 uv sync --frozen
