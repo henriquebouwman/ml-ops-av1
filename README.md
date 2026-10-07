@@ -160,10 +160,18 @@ UV_OFFLINE=1 uv run just demo     # terminal 3
 
 `UV_OFFLINE=1` impede o `uv` de tentar consultar a internet.
 
-**Windows.** O fluxo acima foi testado em macOS; em Linux os comandos são os mesmos.
-Não foi testado no Windows. No Windows, a recomendação é usar WSL2 e seguir os mesmos
-comandos. Sem WSL, o `justfile` pode não
-funcionar; os comandos equivalentes, no PowerShell, são:
+**Windows.** Testado em Windows 11 (Git Bash, `uv` 0.12.23, Ollama 0.35.1, Ryzen 5 5600X,
+16 GB de RAM, Radeon RX 6600): `uv sync --frozen`, `uv run just serve`, `uv run just demo`
+e `uv run just test` funcionam e dão as mesmas respostas do macOS (`example02.jpg`:
+série `00175519`, consumo `1385`; `example04.jpg`: série `4788591`, consumo `28256`).
+Tempo medido: ~24 s na primeira chamada (carrega o modelo), 3,6 s nas seguintes. O `just`
+roda as receitas com `sh` (vem com o Git para Windows), e as receitas chamam o `uv`
+diretamente: ele precisa estar no `PATH`. Com o instalador oficial do `uv`
+(`irm https://astral.sh/uv/install.ps1 | iex`, que instala em `~/.local/bin` e já o põe no
+`PATH`) isso funciona, e foi o que testamos; se instalou com `pip install --user uv`, adicione ao `PATH` a pasta
+`%APPDATA%\Python\Python313\Scripts`, ou use `python -m uv run just ...` com essa pasta
+no `PATH`. Em PowerShell puro, sem Git para Windows, o `justfile` pode não funcionar; os
+comandos equivalentes são:
 
 ```powershell
 uv sync --frozen
@@ -262,6 +270,12 @@ subir servidor):
 
 Saída esperada: `3 passed` (ou `2 passed, 1 skipped` sem o Ollama).
 
+Também há `tests/test_confianca_nitidez.py`, com testes unitários da fórmula de confiança
+e da checagem de nitidez (7 passam, 1 `xfail`; não precisam de Ollama). O `xfail` documenta
+uma limitação conhecida: o `FIND_EDGES` do Pillow não filtra a borda de 1 px, então uma
+imagem lisa e não preta (por exemplo, cinza 200x200) passa como nítida. Fotos reais não
+são lisas, mas a checagem de nitidez não é à prova disso.
+
 ## Uso de IA
 
 **Ferramentas usadas**
@@ -311,11 +325,30 @@ não ter um modelo com boa acurácia. Depois disso, as decisões passaram a prio
 serviço em volta do modelo.
 
 - **O que aceitamos sem alterar:** de modo geral, a execução das etapas do roteiro.
-- **O que corrigimos ou rejeitamos:** _[PENDENTE: preencher pela equipe]_
-- **O que ainda não confiamos:** _[PENDENTE: preencher pela equipe — por exemplo, o
-  limiar de nitidez de 300, a fórmula de confiança, o prompt]_
-- **Como dividimos a revisão do código:** _[PENDENTE: preencher pela equipe — quem
-  revisou `service.py`, `extractor/`, os testes e o README]_
+- **O que corrigimos ou rejeitamos:**
+  - Rejeitamos a licença que o Ollama exibe (Apache 2.0) para o `qwen2.5vl:3b`; o
+    repositório original declara uma licença só para pesquisa, e a seção Modelo foi
+    corrigida.
+  - Tiramos do prompt o valor de exemplo, porque o modelo o copiava como resposta.
+  - Não aceitamos que o modelo decida sozinho quando não há display: a checagem de
+    nitidez antes do modelo existe porque ele inventava `1234567890` numa imagem lisa.
+  - Corrigimos o passo a passo do README depois de simular um clone limpo (travava num
+    terminal só, e o tamanho do ambiente estava errado).
+- **O que ainda não confiamos:**
+  - **O limiar de nitidez (300):** foi calibrado só nas imagens de exemplo. Além disso, o
+    `FIND_EDGES` do Pillow não filtra a borda de 1 px, então uma imagem lisa e não preta
+    passa como nítida (cinza 200×200 dá variância 319; branca, 1268). Está registrado
+    como `xfail` em `tests/test_confianca_nitidez.py`.
+  - **A fórmula de confiança:** o modelo declarou 0,9 até em campos errados, e a fórmula
+    só corta pela metade quando o formato é inválido. Um número errado com formato válido
+    mantém a confiança alta.
+  - **O prompt:** foi ajustado a olho em 5 fotos, sem base rotulada, e a função quase
+    nunca é lida.
+- **Como dividimos a revisão do código:**
+  - João Pedro revisou o README, `service.py`, `extractor/modelo.py`,
+    `extractor/confianca.py`, `extractor/nitidez.py` e `tests/test_service.py`, e escreveu
+    os testes unitários de confiança e nitidez (branch `joao/testes-unitarios`, em pull
+    request).
 
 ## Estrutura
 
