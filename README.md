@@ -262,6 +262,12 @@ subir servidor):
 
 Saída esperada: `3 passed` (ou `2 passed, 1 skipped` sem o Ollama).
 
+Também há `tests/test_confianca_nitidez.py`, com testes unitários da fórmula de confiança
+e da checagem de nitidez (7 passam, 1 `xfail`; não precisam de Ollama). O `xfail` documenta
+uma limitação conhecida: o `FIND_EDGES` do Pillow não filtra a borda de 1 px, então uma
+imagem lisa e não preta (por exemplo, cinza 200x200) passa como nítida. Fotos reais não
+são lisas, mas a checagem de nitidez não é à prova disso.
+
 ## Uso de IA
 
 **Ferramentas usadas**
