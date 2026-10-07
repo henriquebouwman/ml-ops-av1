@@ -317,11 +317,30 @@ não ter um modelo com boa acurácia. Depois disso, as decisões passaram a prio
 serviço em volta do modelo.
 
 - **O que aceitamos sem alterar:** de modo geral, a execução das etapas do roteiro.
-- **O que corrigimos ou rejeitamos:** _[PENDENTE: preencher pela equipe]_
-- **O que ainda não confiamos:** _[PENDENTE: preencher pela equipe — por exemplo, o
-  limiar de nitidez de 300, a fórmula de confiança, o prompt]_
-- **Como dividimos a revisão do código:** _[PENDENTE: preencher pela equipe — quem
-  revisou `service.py`, `extractor/`, os testes e o README]_
+- **O que corrigimos ou rejeitamos:**
+  - Rejeitamos a licença que o Ollama exibe (Apache 2.0) para o `qwen2.5vl:3b`; o
+    repositório original declara uma licença só para pesquisa, e a seção Modelo foi
+    corrigida.
+  - Tiramos do prompt o valor de exemplo, porque o modelo o copiava como resposta.
+  - Não aceitamos que o modelo decida sozinho quando não há display: a checagem de
+    nitidez antes do modelo existe porque ele inventava `1234567890` numa imagem lisa.
+  - Corrigimos o passo a passo do README depois de simular um clone limpo (travava num
+    terminal só, e o tamanho do ambiente estava errado).
+- **O que ainda não confiamos:**
+  - **O limiar de nitidez (300):** foi calibrado só nas imagens de exemplo. Além disso, o
+    `FIND_EDGES` do Pillow não filtra a borda de 1 px, então uma imagem lisa e não preta
+    passa como nítida (cinza 200×200 dá variância 319; branca, 1268). Está registrado
+    como `xfail` em `tests/test_confianca_nitidez.py`.
+  - **A fórmula de confiança:** o modelo declarou 0,9 até em campos errados, e a fórmula
+    só corta pela metade quando o formato é inválido. Um número errado com formato válido
+    mantém a confiança alta.
+  - **O prompt:** foi ajustado a olho em 5 fotos, sem base rotulada, e a função quase
+    nunca é lida.
+- **Como dividimos a revisão do código:**
+  - João Pedro revisou `extractor/confianca.py`, `extractor/nitidez.py` e escreveu os
+    testes unitários de ambos (branch `joao/testes-unitarios`, em pull request).
+  - _[PENDENTE: Henrique e João confirmarem quem revisou `service.py`,
+    `extractor/modelo.py`, `tests/test_service.py` e o README]_
 
 ## Estrutura
 
