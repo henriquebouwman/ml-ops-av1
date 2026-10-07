@@ -166,8 +166,9 @@ e `uv run just test` funcionam e dão as mesmas respostas do macOS (`example02.j
 série `00175519`, consumo `1385`; `example04.jpg`: série `4788591`, consumo `28256`).
 Tempo medido: ~24 s na primeira chamada (carrega o modelo), 3,6 s nas seguintes. O `just`
 roda as receitas com `sh` (vem com o Git para Windows), e as receitas chamam o `uv`
-diretamente: ele precisa estar no `PATH`. Com o instalador oficial do `uv` isso já
-acontece; se instalou com `pip install --user uv`, adicione ao `PATH` a pasta
+diretamente: ele precisa estar no `PATH`. Com o instalador oficial do `uv`
+(`irm https://astral.sh/uv/install.ps1 | iex`, que instala em `~/.local/bin` e já o põe no
+`PATH`) isso funciona, e foi o que testamos; se instalou com `pip install --user uv`, adicione ao `PATH` a pasta
 `%APPDATA%\Python\Python313\Scripts`, ou use `python -m uv run just ...` com essa pasta
 no `PATH`. Em PowerShell puro, sem Git para Windows, o `justfile` pode não funcionar; os
 comandos equivalentes são:
