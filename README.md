@@ -259,8 +259,8 @@ prontos.
 uv run just test
 ```
 
-Três testes em `tests/test_service.py`, que chamam o app do BentoML em processo (sem
-subir servidor):
+O `just test` roda os dois arquivos de teste. Os três testes de `tests/test_service.py`
+chamam o app do BentoML em processo (sem subir servidor):
 
 | Teste | O que verifica | Precisa do Ollama? |
 |---|---|---|
@@ -268,13 +268,15 @@ subir servidor):
 | `test_foto_ruim_devolve_ilegivel` | `example02.jpg` desfocada → 200, campos `null`, `status: ILEGIVEL`, confiança 0 | não |
 | `test_entrada_invalida_devolve_400` | texto enviado como `.jpg` → 400 com mensagem clara | não |
 
-Saída esperada: `3 passed` (ou `2 passed, 1 skipped` sem o Ollama).
-
 Também há `tests/test_confianca_nitidez.py`, com testes unitários da fórmula de confiança
 e da checagem de nitidez (7 passam, 1 `xfail`; não precisam de Ollama). O `xfail` documenta
 uma limitação conhecida: o `FIND_EDGES` do Pillow não filtra a borda de 1 px, então uma
 imagem lisa e não preta (por exemplo, cinza 200x200) passa como nítida. Fotos reais não
 são lisas, mas a checagem de nitidez não é à prova disso.
+
+Saída esperada do `just test` (os dois arquivos juntos): `10 passed, 1 xfailed` com o
+Ollama de pé e o modelo baixado, ou `9 passed, 1 skipped, 1 xfailed` sem o Ollama (o teste
+da foto boa é pulado).
 
 ## Uso de IA
 
@@ -358,7 +360,7 @@ extractor/
   modelo.py          prompt, JSON schema, chamada ao Ollama e limpeza dos campos
   nitidez.py         checagem de nitidez antes do modelo
   confianca.py       validações de formato e fórmula da confiança
-tests/               3 testes do /extract
+tests/               3 testes do /extract + 8 testes unitários de confiança e nitidez
 examples/            5 fotos públicas + exemplo_resposta.json
 docs/                evidências (curl, Swagger) e texto do slide sobre as imagens
 scripts/probe_model.py   teste descartável usado para escolher o modelo
