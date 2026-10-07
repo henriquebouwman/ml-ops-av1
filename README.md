@@ -337,11 +337,10 @@ serviço em volta do modelo.
   - **O prompt:** foi ajustado a olho em 5 fotos, sem base rotulada, e a função quase
     nunca é lida.
 - **Como dividimos a revisão do código:**
-  - João Pedro revisou o README, `extractor/confianca.py` e `extractor/nitidez.py`, e
-    escreveu os testes unitários de ambos (branch `joao/testes-unitarios`, em pull
+  - João Pedro revisou o README, `service.py`, `extractor/modelo.py`,
+    `extractor/confianca.py`, `extractor/nitidez.py` e `tests/test_service.py`, e escreveu
+    os testes unitários de confiança e nitidez (branch `joao/testes-unitarios`, em pull
     request).
-  - _[PENDENTE: Henrique e João confirmarem quem revisou `service.py`,
-    `extractor/modelo.py` e `tests/test_service.py`]_
 
 ## Estrutura
 
